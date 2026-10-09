@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SmartResume | AI Resume Analyzer</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <p class="eyebrow">CSE MINI / MAJOR PROJECT</p>
+      <h1>SmartResume</h1>
+      <p class="subtitle">AI-inspired Resume Analyzer & Job Skill Matcher</p>
+      <p class="intro">Compare resume skills with a job description and get practical improvement suggestions.</p>
+    </div>
+  </header>
+  <main class="wrap main">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <section class="panel">
+      <h2>Analyze your resume</h2>
+      <p class="muted">Upload a text-based PDF/TXT resume, or paste your resume text below. Paste the job description for comparison.</p>
+      <form method="post" enctype="multipart/form-data">
+        <label for="resume_file">Resume file (PDF or TXT, max 5 MB)</label>
+        <input id="resume_file" name="resume_file" type="file" accept=".pdf,.txt">
+        <div class="or">OR paste resume text</div>
+        <label for="resume_text">Resume text</label>
+        <textarea id="resume_text" name="resume_text" rows="8" placeholder="Paste your resume text here..."></textarea>
+        <label for="job_description">Job description <span class="required">*</span></label>
+        <textarea id="job_description" name="job_description" rows="7" required placeholder="Paste the target job description here..."></textarea>
+        <button type="submit">Analyze Resume</button>
+      </form>
+      <p class="privacy">Privacy note: uploaded file content is processed for this request and is not saved as a permanent resume file by this app.</p>
+    </section>
+
+    {% if result %}
+    <section class="results">
+      <h2>Analysis results</h2>
+      {% if result.no_job_skills %}
+        <div class="alert error">No known skills were detected in the job description. Add specific skills (for example, Python, SQL, HTML) and analyze again.</div>
+      {% endif %}
+      <div class="score-card">
+        <div class="score-circle"><span>{{ result.score }}%</span></div>
+        <div>
+          <h3>Skill match score</h3>
+          <p class="muted">Based on recognized skills in the job description that were also found in your resume. This is not a hiring prediction.</p>
+          <p><strong>{{ result.matched_skills|length }}</strong> matched out of <strong>{{ result.job_skill_count }}</strong> recognized job skills</p>
+        </div>
+      </div>
+      <div class="result-grid">
+        <article class="result-card">
+          <h3>Matched skills ({{ result.matched_skills|length }})</h3>
+          {% if result.matched_skills %}
+            <div class="chips">{% for skill in result.matched_skills %}<span class="chip good">{{ skill }}</span>{% endfor %}</div>
+          {% else %}<p class="muted">No matches found yet.</p>{% endif %}
+        </article>
+        <article class="result-card">
+          <h3>Skills to review ({{ result.missing_skills|length }})</h3>
+          {% if result.missing_skills %}
+            <div class="chips">{% for skill in result.missing_skills %}<span class="chip missing">{{ skill }}</span>{% endfor %}</div>
+          {% else %}<p class="muted">All recognized job skills were found in the resume.</p>{% endif %}
+        </article>
+        <article class="result-card wide">
+          <h3>Resume improvement suggestions</h3>
+          <ul>{% for suggestion in result.suggestions %}<li>{{ suggestion }}</li>{% endfor %}</ul>
+        </article>
+      </div>
+      <p class="disclaimer">Important: this is an educational prototype using a small rule-based skill vocabulary. It does not understand every phrase, judge resume quality completely, or guarantee job selection. Never add a skill unless you actually have it.</p>
+    </section>
+    {% endif %}
+    <footer>SmartResume • Student project prototype • Built with Python + Flask</footer>
+  </main>
+</body>
+</html>

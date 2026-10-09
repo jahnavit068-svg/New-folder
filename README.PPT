@@ -1,0 +1,94 @@
+# SmartResume — AI-inspired Resume Analyzer
+
+A student-friendly CSE project built with Python, Flask, HTML, CSS, and basic NLP-style skill matching.
+
+## Features
+- Upload a text-based PDF or TXT resume, or paste resume text
+- Compare resume skills with a pasted job description
+- Show a skill-match percentage
+- List matched and missing recognized skills
+- Suggest resume sections to review
+- Responsive web interface
+- Uploaded file bytes are read in memory and are not permanently stored by the app
+
+## Important limitation
+This is an educational prototype. It uses a small editable skill vocabulary and rule-based text matching, not a large language model. The score measures only recognized skill overlap; it is not a hiring prediction. A scanned/image-only PDF may need OCR before it can be analyzed. Never add skills you do not actually have.
+
+## Requirements
+- Python 3.10 or newer recommended
+- pip
+- A laptop browser
+
+## Setup on Windows
+1. Extract `SmartResume_AI_Analyzer.zip`.
+2. Open the extracted folder.
+3. Open Command Prompt or VS Code terminal in this folder.
+4. Create a virtual environment:
+   ```bat
+   py -m venv venv
+   ```
+5. Activate it:
+   ```bat
+   venv\Scripts\activate
+   ```
+6. Install packages:
+   ```bat
+   pip install -r requirements.txt
+   ```
+7. Start the app:
+   ```bat
+   python app.py
+   ```
+8. Open the local address shown in the terminal, usually `http://127.0.0.1:5000`.
+9. Paste sample resume text and a job description, then click **Analyze Resume**.
+
+## Setup on macOS/Linux
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python app.py
+```
+Then open `http://127.0.0.1:5000`.
+
+## Sample test data
+Resume text:
+```
+Jahnavi Thota
+B.Tech CSE student
+Skills: Python, SQL, HTML, CSS, JavaScript, teamwork
+Projects: Student Attendance Management System using Python and SQLite
+Education: Bachelor of Technology in Computer Science
+```
+
+Job description:
+```
+We are looking for a fresher with Python, SQL, HTML, CSS, JavaScript, Flask, Git, communication and problem solving skills.
+```
+
+Expected behavior: the app should detect overlapping skills such as Python, SQL, HTML, CSS and JavaScript; it should list other recognized job skills as missing if they are not in the resume. Exact score depends on the vocabulary.
+
+## Project structure
+```
+SmartResume_AI_Analyzer/
+├── app.py
+├── analyzer.py
+├── requirements.txt
+├── README.md
+├── PROJECT_REPORT.docx
+├── templates/
+│   └── index.html
+├── static/
+│   └── style.css
+└── uploads/
+```
+
+## Customization
+Edit the `SKILLS` list in `analyzer.py` to add terms relevant to your target jobs. Keep related terms distinct when necessary to reduce false matches.
+
+## Troubleshooting
+- `pip` not recognized: install Python from python.org and enable “Add Python to PATH”.
+- `No module named flask`: activate your virtual environment and run `pip install -r requirements.txt`.
+- PDF has no extracted text: it may be scanned. Try a text-based PDF or paste the resume text.
+- Port 5000 is busy: change `app.run(debug=True, port=5001)` and visit port 5001.
+- For public deployment, disable debug mode, set a secure secret key, add CSRF protection, and configure production hosting.

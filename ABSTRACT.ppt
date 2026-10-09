@@ -1,0 +1,4 @@
+Project Title: SmartResume – AI-Inspired Resume Analyzer & Job Skill Matcher
+
+Abstract:
+SmartResume is a web-based educational prototype that compares skills found in a resume with skills recognized in a target job description. Users can paste resume text or upload a text-based PDF/TXT file. The application extracts recognized skill terms, calculates a skill-overlap percentage, displays matched and missing skills, and provides basic resume-improvement suggestions. It is developed using Python, Flask, HTML, CSS, and rule-based text processing. The score is only a measure of recognized skill overlap and is not a hiring prediction. The system is a student prototype and does not use a trained AI model or large language model.
